@@ -1,5 +1,7 @@
 name: main
 on: [push, pull_request]
+permissions:
+  contents: read|write
 jobs:
   build-windows:
     name: windows - nodejs ${{ matrix.node }}
