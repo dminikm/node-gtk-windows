@@ -7,8 +7,8 @@ jobs:
     strategy:
       matrix:
         node:
+          - 18
           - 16
-          - 12
     defaults:
       run:
         shell: msys2 {0}
@@ -49,53 +49,15 @@ jobs:
                     --skip=callback                 \
                     --skip=signal__non-introspected \
                     tests/__run__.js
-
-  build:
-    name: ${{ matrix.os }} - nodejs ${{ matrix.node }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-18.04
-          - macos-latest
-        node:
-          # - 18 Fix: upgrade to ubuntu-20.04 & resolve package issues
-          - 17
-          - 16
-          - 14
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node }}
-
-      # FIXME: cache disabled becasue not working for now
-      # Setup cache
-      # - uses: actions/cache@v2
-      #   id: node-gtk-cache
-      #   with:
-      #     path: ${{ runner.temp }}/packages-cache
-      #     key: ${{ runner.os }}-node-${{ matrix.node }}-cache-key-1.0
-
-      # Install & cache packages
-      # - uses: airvzxf/cache-anything-new-action@v1.0.1
-      #   with:
-      #     script: 'install.sh'
-      #     is_cached: ${{ steps.cache-id.outputs.cache-hit }}
-      #     cache: ${{ runner.temp }}/packages-cache
-      #     snapshot: '/'
-      #     exclude: '/boot /data /dev /mnt /proc /run /sys'
-
-      # Install & cache packages
-      - run: .github/workflows/install.sh
-
-
-      # Install & Build
-      - run: npm install --build-from-source
-
-      # Run the CI script (tests & publishing)
-      - run: ./scripts/ci.sh
+      
+      - name: Publish binaries
+        run: ./windows/publish.sh
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+

@@ -1,5 +1,5 @@
 {
-  "name": "node-gtk",
+  "name": "node-gtk-windows",
   "version": "0.11.0",
   "description": "GNOME Gtk+ bindings for NodeJS",
   "main": "lib/index.js",
@@ -59,8 +59,8 @@
   "binary": {
     "module_name": "node_gtk",
     "module_path": "./lib/binding/{node_abi}-{platform}-{arch}/",
-    "remote_path": "./{module_name}/v{version}/",
+    "remote_path": "{version}",
     "package_name": "{module_name}-{node_abi}-{platform}-{arch}.tar.gz",
-    "host": "https://node-gtk-1.s3.amazonaws.com"
+    "host": "https://github.com/dminik/node-gtk-windows/releases/download/"
   }
 }
