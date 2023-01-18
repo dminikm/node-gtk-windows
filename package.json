@@ -48,7 +48,7 @@
     "deasync": "^0.1.19",
     "mocha": "^7.1.0",
     "nid-parser": "0.0.5",
-    "node-pre-gyp-github": "^1.4.3"
+    "node-pre-gyp-github": "^1.4.4"
   },
   "files": [
     "/lib",
